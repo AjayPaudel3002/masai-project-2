@@ -15,7 +15,17 @@ export default class Home extends React.Component {
     render(){
         return (
             <div>
+               <div>
                 "Ajay"
+            </div><div>
+                "Ajay"
+            </div><div>
+                "Ajay"
+            </div><div>
+                "Ajay"
+            </div><div>
+                "Ajay"
+            </div>
             </div>
         )
     }
