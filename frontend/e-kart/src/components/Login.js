@@ -6,17 +6,44 @@ import { Router as BrowserRouter, Link } from "react-router-dom"
 
 export default class Login extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
-
+            email: "",
+            password: ""
         }
     }
 
-    render(){
+    login = () => {
+        axios.post('/login', {
+            email: this.state.email,
+            password: this.state.password,
+            login_person: "customer"
+        })
+    }
+    render() {
+        console.log(this.state)
         return (
-            <div>
-                "Ajay"
+            <div class="jumbotron jumbotron-fluid design1">
+                <div class="container ">
+                    <div>
+                        <h1 class="display-7 text-center">Wel-Come</h1>
+                    </div>
+                    <div className="card mx-auto" style={{ width: "390px" }}>
+                        <div className="card-body text-center mx-auto">
+                            <input className="form-control form-control-lg" type="text" placeholder="Email" style={{ width: "350px" }} onChange={(e) => this.setState({ email: e.target.value })} value={this.state.email} />
+                            <br />
+                            <input className="form-control form-control-lg" type="text" placeholder="Password" style={{ width: "350px" }} onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password} />
+                            <br />
+                            <div>
+                                <button type="button" class="btn btn-link" onClick={this.login}>Login</button>
+                                <button type="button" class="btn btn-link">Sign Up</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        )
+
+        );
     }
 }
+
