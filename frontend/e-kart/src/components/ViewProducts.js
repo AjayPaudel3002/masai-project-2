@@ -16,8 +16,7 @@ export default class ViewProducts extends React.Component {
                     name:"Lg 190L Direct Cool Single Door",
                     available_Quantity:"8",
                     price:"₹300"
-                 },
-                 {
+                 },{
                     id:2,
                     brand:"redmi",
                     src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
@@ -48,6 +47,27 @@ export default class ViewProducts extends React.Component {
                     available_Quantity:"8",
                     price:"₹300"
                  },
+                 {
+                    id:4,
+                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
+                    name:"Lg 190L Direct Cool Single Door",
+                    available_Quantity:"8",
+                    price:"₹300"
+                 },
+                 {
+                    id:4,
+                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
+                    name:"Lg 190L Direct Cool Single Door",
+                    available_Quantity:"8",
+                    price:"₹300"
+                 },
+                 {
+                    id:4,
+                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
+                    name:"Lg 190L Direct Cool Single Door",
+                    available_Quantity:"8",
+                    price:"₹300"
+                 }
              ]
          }
          
@@ -60,11 +80,16 @@ export default class ViewProducts extends React.Component {
                            {this.state.cart.map(item =>{
                                return(
                                    <div className="col-lg-3">
-                                       <div className="card mx-auto">
+                                       <div className="card mx-auto shadow-lg p-3 mb-5 bg-white rounded">
                                            <img src={item.src} className="mx-auto" style={{height:"200px",width:"200px"}}/><hr />
                                            <div className="mx-auto text-primary">{item.name}</div>
                                            <div className="mx-auto">Price:{item.price}</div>
                                            <div className="mx-auto">Available Quantity:{item.available_Quantity}</div>
+                                           <div className="text-center">
+                                                    <button className="btn btn-primary ">update</button>
+                                                    
+                                                    <button className="btn btn-primary ml-2">Delete</button>
+                                                </div>
                                        </div>
                                    </div>
                                )
