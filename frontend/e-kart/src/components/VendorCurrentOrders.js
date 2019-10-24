@@ -8,7 +8,7 @@ export default class VendorCurrentOrders extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-
+            
         }
     }
 

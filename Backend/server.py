@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended import (create_access_token,jwt_required,decode_token)
+from flask_jwt_extended import (create_access_token,create_refresh_token,jwt_required,decode_token)
 app = Flask(__name__)
 from bson.json_util import dumps
 app.config["MONGO_URI"] = "mongodb://localhost:27017/e-kart"
@@ -50,7 +50,9 @@ def login(person):
         response = mongo.db.customer.find_one({"email":email})
         if response:
             if bcrypt.check_password_hash(response["password"],password):
+                # expires = datetime.timedelta(days=1)
                 token = create_access_token(identity = response["email"] )
+                refresh_token = create_refresh_token(identity=response["email"] )
                 result = jsonify({"error":"false","token":token,"type":person})
             else:
                 result = jsonify({"error":"true","message":"Invalid login credentials"})
@@ -62,6 +64,7 @@ def login(person):
         if response:
             if bcrypt.check_password_hash(response["password"],password):
                 token = create_access_token(identity = response["email"] )
+                refresh_token = create_refresh_token(identity=response["email"] )
                 result = jsonify({"error":"false","token":token,"type":person})
                 decode = decode_token(token)
                 print(str(decode["identity"]))
@@ -134,7 +137,7 @@ def add_products(token):
         return dumps({"message":"Added successfully"})
 
         
-@app.route("/view_products/vendor/<string:token>")
+@app.route("/view_products_vendor/<string:token>")
 def view_products(token):
     decode = decode_token(token)
     vendor_email = str(decode["identity"])
@@ -144,8 +147,9 @@ def view_products(token):
     for i in vendor:
         products = i["products"]
         for j in products:
-            all_products.append(mongo.db.products.find({"_id":j}))
-    print(all_products)
+            print(dumps(j))
+            all_products.append(mongo.db.products.find_one({"_id":j}))
+    # print(all_products)
     return dumps(all_products)
 
 @app.route("/view_products_admin/<string:token>")

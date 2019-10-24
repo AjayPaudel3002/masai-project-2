@@ -4,6 +4,8 @@ import {Router as BrowserRouter,Link,Route,Switch} from "react-router-dom"
 import Home from "./Home"
 import Orders from "./Orders"
 import Login from "./Login"
+import AddProducts from "./AddProducts"
+import ViewProducts from "./ViewProducts"
 // import Register from "./Register.js"
 // import CompanyRegister from "CompanyRegister"
 
@@ -20,8 +22,8 @@ export default class App extends React.Component{
                     {/* <Route path = "/buy_products/:product_id" render = {(props)=><BuyProducts> {...props}</BuyProducts>}></Route> */}
                     {/* <Route path = "/cart" render = {(props)=><Cart> {...props}</Cart>}></Route> */}
                     <Route path = "/orders" render = {(props)=><Orders {...props}></Orders>}></Route>
-                    {/* <Route path = "/add_products/:vendor_id" render = {(props)=><AddProducts> {...props}</AddProducts>}></Route> */}
-                    {/* <Route path = "/view_products/:vendor_id" render = {(props)=><ViewProducts> {...props}</ViewProducts>}></Route> */}
+                    <Route path = "/add_products/:vendor_id" render = {(props)=><AddProducts{...props}></AddProducts>}></Route>
+                    <Route path = "/view_products/:vendor_id" render = {(props)=><ViewProducts {...props}></ViewProducts>}></Route>
                     {/* <Route path = "/vendor_current_orders/:vendor_id" render = {(props)=><VendorCurrentOrders> {...props}</VendorCurrentOrders>}></Route> */}
                     {/* <Route path = "/vendor_past_orders/:vendor_id" render = {(props)=><VendorPastOrders> {...props}</VendorPastOrders>}></Route> */}
                     {/* <Route path = "/admin_past_order/" render = {(props)=><AdminPastOrders> {...props}</AdminPastOrders>}></Route> */}
