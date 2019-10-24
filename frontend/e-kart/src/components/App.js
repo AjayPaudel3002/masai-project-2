@@ -7,9 +7,6 @@ import Login from "./Login"
 // import Register from "./Register.js"
 // import CompanyRegister from "CompanyRegister"
 
-
-
-
 export default class App extends React.Component{
     render(){
         return(
