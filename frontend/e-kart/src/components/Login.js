@@ -2,7 +2,8 @@ import React from "react"
 import ReactDOM from "react-dom"
 import axios from "axios"
 import { Router as BrowserRouter, Link } from "react-router-dom"
-import { createCookie, accessCookie, deleteCookie } from '../commons/cookies/index.js'
+import { setUserTokenInCookie, clearUserToken, checkIsTokenPresentInCookie,getTokenFromCookie,checkIsAuthenticated } from '../commons/index'
+import {createCookie} from "../commons/cookies"
 // import queryString from "query-string"
 
 export default class Login extends React.Component {
@@ -20,7 +21,7 @@ export default class Login extends React.Component {
             password: this.state.password,
         }).then((response)=>{
             console.log(response)
-            createCookie(response.type,response.token,1)
+            createCookie(response.data.type,response.data.token,1)
         })
         
         
