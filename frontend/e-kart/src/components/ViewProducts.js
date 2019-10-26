@@ -5,79 +5,37 @@ import { Router as BrowserRouter, Link } from "react-router-dom"
 // import queryString from "query-string"
 
 export default class ViewProducts extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-         this.state={
-             cart:[
-                 {
-                    id:1,
-                    brand:"redmi",
-                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
-                    name:"Lg 190L Direct Cool Single Door",
-                    available_Quantity:"8",
-                    price:"₹300"
-                 },{
-                    id:2,
-                    brand:"redmi",
-                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
-                    name:"Lg 190L Direct Cool Single Door",
-                    available_Quantity:"8",
-                    price:"₹300"
-                 },
-                 {
-                    id:3,
-                    brand:"redmi",
-                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
-                    name:"Lg 190L Direct Cool Single Door",
-                    available_Quantity:"8",
-                    price:"₹300"
-                 },
-                 {
-                    id:4,
-                    brand:"redmi",
-                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
-                    name:"Lg 190L Direct Cool Single Door",
-                    available_Quantity:"8",
-                    price:"₹300"
-                 },
-                 {
-                    id:4,
-                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
-                    name:"Lg 190L Direct Cool Single Door",
-                    available_Quantity:"8",
-                    price:"₹300"
-                 },
-                 {
-                    id:4,
-                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
-                    name:"Lg 190L Direct Cool Single Door",
-                    available_Quantity:"8",
-                    price:"₹300"
-                 },
-                 {
-                    id:4,
-                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
-                    name:"Lg 190L Direct Cool Single Door",
-                    available_Quantity:"8",
-                    price:"₹300"
-                 },
-                 {
-                    id:4,
-                    src:"https://www.makeinker.com/wp-content/uploads/2019/03/redmi-note-5-pro-64-blue.jpg",
-                    name:"Lg 190L Direct Cool Single Door",
-                    available_Quantity:"8",
-                    price:"₹300"
-                 }
-             ]
-         }
-         
-     }
-    render(){
-        return(
+        this.state = {
+            product: []
+        }
+    }
+    componentDidMount() {
+        //  here this.props.params.
+        axios.get(`http://localhost:5000/view_products_vendor/${this.props.match.params.vendor_id}`)
+            .then((response)=> {
+                // handle success
+                console.log(response.data);
+                this.setState({
+                    product:response.data
+                })
+            })
+            .catch( (error)=> {
+                // handle error
+                // alert(error)
+            })
+        }
+
+    render() {
+        console.log(this.state.product)
+        return (
             <div>
+                <br></br>
+                <br></br>
                 <div className="container mx-auto">
                         <div className="row">
-                           {this.state.cart.map(item =>{
+                           {this.state.product.map(item =>{
                                return(
                                    <div className="col-lg-3">
                                        <div className="card mx-auto shadow-lg p-3 mb-5 bg-white rounded">
@@ -96,7 +54,7 @@ export default class ViewProducts extends React.Component {
                            })} 
                         </div>
                 </div>
-            </div>     
+            </div>
         )
     }
 }
