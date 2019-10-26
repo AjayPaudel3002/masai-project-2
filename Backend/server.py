@@ -3,11 +3,16 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
+<<<<<<< HEAD
+import datetime
+=======
+>>>>>>> master
 from flask_jwt_extended import (create_access_token,create_refresh_token,jwt_required,decode_token)
 app = Flask(__name__)
 from bson.json_util import dumps
 app.config["MONGO_URI"] = "mongodb://localhost:27017/e-kart"
 app.config["JWT_SECRET_KEY"] = "secret"
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
@@ -66,8 +71,8 @@ def login(person):
                 token = create_access_token(identity = response["email"] )
                 refresh_token = create_refresh_token(identity=response["email"] )
                 result = jsonify({"error":"false","token":token,"type":person})
-                decode = decode_token(token)
-                print(str(decode["identity"]))
+                # decode = decode_token(token)
+                # print(str(decode["identity"]))
             else:
                 result = jsonify({"error":"true","message":"Invalid login credentials"})
         else:
@@ -240,9 +245,9 @@ def vendor_past_orders(token):
 #     data = mongo.db.products.find({"brand_name":brand},{"location":location})
 #     return dumps(data)
 
-@app.route("/decode_token")
-def decode_token():
-    token = request.json["token"]
-    decode = decode_token(token)
-    vendor_email = str(decode["identity"])
-    return dumps(email)
+# @app.route("/decode_token",methods=["POST"])
+# def decode_token():
+#     token = request.json["token"]
+#     decode = decode_token(token)
+#     vendor_email = str(decode["identity"])
+#     return dumps(email)
