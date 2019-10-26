@@ -13,12 +13,12 @@ export default class App extends React.Component{
         return(
             <React.Fragment>
                     {/* <Route path = "/" exact render = {(props)=><Home {...props}></Home>}></Route> */}
-                    <PrivateRoute path = "/" exact component={Home}/>
+                    <Route path = "/" exact component={Home}/>
                     {/* <Route path = "/login" render = {(props)=><Login {...props}></Login>}></Route> */}
-                    <LoggedInRoute path = "/login" component={Login}/>
+                    <Route path = "/login/:person" component={Login}/>
                     {/* <Route path = "/company_register" render ={(props)=><CompanyRegister> {...props}</CompanyRegister>}></Route> */}
                     {/* <Route path = "/register" render = {(props)=><Register {...props}></Register>}></Route> */}
-                    <LoggedInRoute path = "/register" component={Register}/>
+                    <PrivateRoute path = "/register" component={Register}/>
                     {/* <Route path = "/all_logins" render = {(props)=><AllLogins> {...props}</AllLogins>}></Route> */}
                     {/* <Route path = "/products" render = {(props)=><Products> {...props}</Products>}></Route> */}
                     {/* <Route path = "/buy_products/:product_id" render = {(props)=><BuyProducts> {...props}</BuyProducts>}></Route> */}

@@ -34,5 +34,6 @@ export function deleteCookie(cookieName) {
 
 export default {
     createCookie,
-    accessCookie
+    accessCookie,
+    deleteCookie
 }

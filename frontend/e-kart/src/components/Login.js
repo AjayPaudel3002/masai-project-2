@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import axios from "axios"
 import { Router as BrowserRouter, Link } from "react-router-dom"
+import { createCookie, accessCookie, deleteCookie } from '../commons/cookies/index.js'
 // import queryString from "query-string"
 
 export default class Login extends React.Component {
@@ -14,10 +15,15 @@ export default class Login extends React.Component {
     }
 
     login = () => {
-        axios.post('/login', {
+        axios.post(`http://localhost:5000/login/${this.props.match.params.person}`, {
             email: this.state.email,
             password: this.state.password,
+        }).then((response)=>{
+            console.log(response)
+            createCookie(response.type,response.token,1)
         })
+        
+        
     }
     render() {
         console.log(this.state)

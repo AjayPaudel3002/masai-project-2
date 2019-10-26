@@ -1,4 +1,4 @@
-import { createCookie, accessCookie, deleteCookie } from './cookies'
+import { createCookie, accessCookie, deleteCookie } from './src/commons/cookies'
 
 export function setUserTokenInCookie(token) {
     var isCookieCreated = createCookie("userToken", token, 1);

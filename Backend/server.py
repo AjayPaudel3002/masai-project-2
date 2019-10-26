@@ -3,11 +3,13 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended import (create_access_token,jwt_required,decode_token)
+import datetime
+from flask_jwt_extended import (create_access_token,create_refresh_token,jwt_required,decode_token)
 app = Flask(__name__)
 from bson.json_util import dumps
 app.config["MONGO_URI"] = "mongodb://localhost:27017/e-kart"
 app.config["JWT_SECRET_KEY"] = "secret"
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
@@ -50,7 +52,9 @@ def login(person):
         response = mongo.db.customer.find_one({"email":email})
         if response:
             if bcrypt.check_password_hash(response["password"],password):
+                # expires = datetime.timedelta(days=1)
                 token = create_access_token(identity = response["email"] )
+                refresh_token = create_refresh_token(identity=response["email"] )
                 result = jsonify({"error":"false","token":token,"type":person})
             else:
                 result = jsonify({"error":"true","message":"Invalid login credentials"})
@@ -62,9 +66,10 @@ def login(person):
         if response:
             if bcrypt.check_password_hash(response["password"],password):
                 token = create_access_token(identity = response["email"] )
+                refresh_token = create_refresh_token(identity=response["email"] )
                 result = jsonify({"error":"false","token":token,"type":person})
-                decode = decode_token(token)
-                print(str(decode["identity"]))
+                # decode = decode_token(token)
+                # print(str(decode["identity"]))
             else:
                 result = jsonify({"error":"true","message":"Invalid login credentials"})
         else:
@@ -93,6 +98,7 @@ def login(person):
 
 @app.route("/add_products/<string:token>",methods=["POST"])
 def add_products(token):
+    print(request.files)
     decode = decode_token(token)
     vendor_email = str(decode["identity"])
     vendor = mongo.db.vendor.find({})
@@ -116,7 +122,6 @@ def add_products(token):
     # products["no_of_primary_camera"] = request.json["no_of_primary_camera"]
     # products["available_quantity"] = request.json["available_quantity"]
     # products["price"] = request.json["price"]
-    # products["image1"] = request.json["image1"]
     # products["image2"] = request.json["image2"]
     # #  offer price in percentage
     # products["offer_price"] = request.json["offer_price"] 
@@ -134,18 +139,19 @@ def add_products(token):
         return dumps({"message":"Added successfully"})
 
         
-@app.route("/view_products/vendor/<string:token>")
+@app.route("/view_products_vendor/<string:token>")
 def view_products(token):
     decode = decode_token(token)
     vendor_email = str(decode["identity"])
     vendor = mongo.db.vendor.find({"email":vendor_email})
-    # print(dumps(vendor))
+    print(vendor_email)
     all_products=[]
     for i in vendor:
         products = i["products"]
         for j in products:
-            all_products.append(mongo.db.products.find({"_id":j}))
-    print(all_products)
+            # print(dumps(j))
+            all_products.append(mongo.db.products.find_one({"_id":j}))
+    # print(all_products)
     return dumps(all_products)
 
 @app.route("/view_products_admin/<string:token>")
@@ -231,5 +237,14 @@ def vendor_past_orders(token):
     return dumps({"vendor_orders":vendor_orders ,"all_orders":all_orders })
     # iam sending vendors_all_orders and all orders which are available in orders and in frontend need to filter and display
 
+# @pp.route("/brands/<string:brand>/<string:location>")
+# def brands(brand,location):
+#     data = mongo.db.products.find({"brand_name":brand},{"location":location})
+#     return dumps(data)
 
-
+# @app.route("/decode_token",methods=["POST"])
+# def decode_token():
+#     token = request.json["token"]
+#     decode = decode_token(token)
+#     vendor_email = str(decode["identity"])
+#     return dumps(email)
