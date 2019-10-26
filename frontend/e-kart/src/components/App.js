@@ -6,6 +6,7 @@ import Orders from "./Orders"
 import Login from "./Login"
 import AddProducts from "./AddProducts"
 import ViewProducts from "./ViewProducts"
+import Products from "./Products"
 // import Register from "./Register.js"
 // import CompanyRegister from "CompanyRegister"
 
@@ -18,7 +19,7 @@ export default class App extends React.Component{
                     {/* <Route path = "/company_register" render ={(props)=><CompanyRegister> {...props}</CompanyRegister>}></Route> */}
                     {/* <Route path = "/register" render = {(props)=><Register {...props}></Register>}></Route> */}
                     {/* <Route path = "/all_logins" render = {(props)=><AllLogins> {...props}</AllLogins>}></Route> */}
-                    {/* <Route path = "/products" render = {(props)=><Products> {...props}</Products>}></Route> */}
+                    <Route path = "/brands/:brand/:location" render = {(props)=><Products {...props}></Products>}></Route>
                     {/* <Route path = "/buy_products/:product_id" render = {(props)=><BuyProducts> {...props}</BuyProducts>}></Route> */}
                     {/* <Route path = "/cart" render = {(props)=><Cart> {...props}</Cart>}></Route> */}
                     <Route path = "/orders" render = {(props)=><Orders {...props}></Orders>}></Route>

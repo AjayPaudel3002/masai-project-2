@@ -96,6 +96,7 @@ def login(person):
 
 @app.route("/add_products/<string:token>",methods=["POST"])
 def add_products(token):
+    print(request.files)
     decode = decode_token(token)
     vendor_email = str(decode["identity"])
     vendor = mongo.db.vendor.find({})
@@ -119,7 +120,6 @@ def add_products(token):
     # products["no_of_primary_camera"] = request.json["no_of_primary_camera"]
     # products["available_quantity"] = request.json["available_quantity"]
     # products["price"] = request.json["price"]
-    # products["image1"] = request.json["image1"]
     # products["image2"] = request.json["image2"]
     # #  offer price in percentage
     # products["offer_price"] = request.json["offer_price"] 
@@ -142,12 +142,12 @@ def view_products(token):
     decode = decode_token(token)
     vendor_email = str(decode["identity"])
     vendor = mongo.db.vendor.find({"email":vendor_email})
-    # print(dumps(vendor))
+    print(vendor_email)
     all_products=[]
     for i in vendor:
         products = i["products"]
         for j in products:
-            print(dumps(j))
+            # print(dumps(j))
             all_products.append(mongo.db.products.find_one({"_id":j}))
     # print(all_products)
     return dumps(all_products)
@@ -235,5 +235,14 @@ def vendor_past_orders(token):
     return dumps({"vendor_orders":vendor_orders ,"all_orders":all_orders })
     # iam sending vendors_all_orders and all orders which are available in orders and in frontend need to filter and display
 
+# @pp.route("/brands/<string:brand>/<string:location>")
+# def brands(brand,location):
+#     data = mongo.db.products.find({"brand_name":brand},{"location":location})
+#     return dumps(data)
 
-
+@app.route("/decode_token")
+def decode_token():
+    token = request.json["token"]
+    decode = decode_token(token)
+    vendor_email = str(decode["identity"])
+    return dumps(email)
