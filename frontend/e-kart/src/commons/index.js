@@ -1,55 +1,56 @@
-import { createCookie, accessCookie, deleteCookie } from './cookies'
-
-export function setUserTokenInCookie(token) {
-    var isCookieCreated = createCookie("userToken", token, 1);
-    if (isCookieCreated) {
-        return true;
-    } else {
-        return false;
-    }
+import { createCookie, accessCookie, deleteCookie } from "./cookies";
+import axios from "axios";
+export function setUserTokenInCookie(userType, token) {
+	var isCookieCreated = createCookie(userType, token, 1);
+	if (isCookieCreated) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
-export function clearUserToken() {
-    var isCookieDeleted = deleteCookie("userToken");
-    if (isCookieDeleted) {
-        return true;
-    } else {
-        return false;
-    }
+export function clearUserToken(userType) {
+	var isCookieDeleted = deleteCookie(userType);
+	if (isCookieDeleted) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
-export function checkIsTokenPresentInCookie() {
-    var user = accessCookie("userToken");
-    if (user != "")
-        return true;
-    else {
-        return false;
-    }
+export function checkIsTokenPresentInCookie(userType) {
+	var user = accessCookie(userType);
+	if (user != "") return true;
+	else {
+		return false;
+	}
 }
 
-export function getTokenFromCookie() {
-    return accessCookie("userToken");
+export function getTokenFromCookie(userType) {
+	return accessCookie(userType);
 }
-
 
 // return {isAuthenticated : bool, userType : string ('customer', 'vendor', 'admin')}
-export function checkIsAuthenticated() {
-    try {
-        var isTokenPresent = checkIsTokenPresentInCookie();
-        if (isTokenPresent === false) {
-            return { isAuthenticated: false, userType: null };
-        }
-        return { isAuthenticated: true, userType: 'customer' };
-    } catch (error) {
-        console.error("Error in authenticating user....", error);
-        return { isAuthenticated: false, userType: null };
-    }
+export function checkIsAuthenticated(userType) {
+	try {
+		var isTokenPresent = checkIsTokenPresentInCookie(userType);
+		var userToken = getTokenFromCookie(userType);
+		console.log(userToken, isTokenPresent);
+		// var userType = decode_tokens()
+		if (isTokenPresent === false) {
+			return { isAuthenticated: false, userType: null };
+		}
+		return { isAuthenticated: true, userType: userType, userToken: userToken };
+	} catch (error) {
+		console.error("Error in authenticating user....", error);
+		return { isAuthenticated: false, userType: null };
+	}
 }
 
 export default {
-    setUserTokenInCookie,
-    clearUserToken,
-    checkIsTokenPresentInCookie,
-    getTokenFromCookie,
-    checkIsAuthenticated
-}
+	setUserTokenInCookie,
+	clearUserToken,
+	checkIsTokenPresentInCookie,
+	getTokenFromCookie,
+	checkIsAuthenticated
+};

@@ -12,28 +12,26 @@ export default class CompanyRegister extends React.Component {
 			name: "",
 			email: "",
 			password: "",
-			phone_number: "",
+			phone_number: 0,
 			location: "",
-			company_address: "",
-			company_name: ""
+			address: ""
 		};
 	}
 
-	register =()=> {
+	register = () => {
 		axios
-			.post(`http://localhost:5000/vendor_register`, {
+			.post(`http://localhost:5000/customer_register`, {
 				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password,
 				phone_number: this.state.phone_number,
 				location: this.state.location,
-				company_address: this.state.company_address,
-				company_name: this.state.company_name
+				address: this.state.address
 			})
 			.then(function(response) {
 				console.log(response);
 			});
-	}
+	};
 
 	render() {
 		return (
@@ -76,17 +74,6 @@ export default class CompanyRegister extends React.Component {
 								value={this.state.password}
 							/>
 						</div>
-                        <div class='form-group col-lg-12 col-md-12 col-sm-12 col-12'>
-							<br />
-							<input
-								type='text'
-								class='form-control border border-secondary'
-								id='inputPassword4'
-								placeholder='company_name'
-								onChange={e => this.setState({ company_name: e.target.value })}
-								value={this.state.company_name}
-							/>
-						</div>
 						<div class='form-group col-lg-12 col-md-12 col-sm-12 col-12'>
 							<br />
 							<input
@@ -123,7 +110,14 @@ export default class CompanyRegister extends React.Component {
 							/>
 						</div>
 						<br />
-						<button type='button' class='btn btn-primary mx-auto' onClick = {() => {this.props.history.push("/login/vendor");this.register()}}>
+						<button
+							type='button'
+							class='btn btn-primary mx-auto'
+							onClick={() => {
+								this.props.history.push("/login/customer");
+								this.register();
+							}}
+						>
 							Register
 						</button>
 					</div>

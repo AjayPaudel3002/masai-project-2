@@ -3,10 +3,8 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
-<<<<<<< HEAD
 import datetime
-=======
->>>>>>> master
+from flask_cors import CORS
 from flask_jwt_extended import (create_access_token,create_refresh_token,jwt_required,decode_token)
 app = Flask(__name__)
 from bson.json_util import dumps
@@ -16,6 +14,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+CORS(app)
 
 @app.route("/customer_register" ,methods = ["POST"])
 def customer_register():
@@ -25,6 +24,7 @@ def customer_register():
     data["phone_number"]= request.json["phone_number"]
     data["address"]= request.json["address"]
     data["password"] = bcrypt.generate_password_hash(request.get_json()["password"]).decode("utf-8")
+    data["location"] = request.json["location"]
     is_available = mongo.db.customer.find({"email":request.json["email"]})
     if is_available != None:
         mongo.db.customer.insert(data)
@@ -38,7 +38,8 @@ def vendor_register():
     data["name"]= request.json["name"]
     data["email"]= request.json["email"]
     data["phone_number"]= request.json["phone_number"]
-    data["address"]= request.json["address"]
+    data["company_address"]= request.json["company_address"]
+    data["location"] = request.json["location"]
     data["password"] = bcrypt.generate_password_hash(request.get_json()["password"]).decode("utf-8")
     is_available = mongo.db.vendor.find({"email":request.json["email"]})
     if is_available != None:
@@ -99,36 +100,35 @@ def login(person):
 #     mongo.db.admin.insert(data)
 #     return dumps("Added")
 
-@app.route("/add_products/<string:token>",methods=["POST"])
-def add_products(token):
-    print(request.files)
-    decode = decode_token(token)
+@app.route("/add_products",methods=["POST"])
+def add_products():
+    decode = decode_token(request.json["token"])
+    # print(decode)
     vendor_email = str(decode["identity"])
-    vendor = mongo.db.vendor.find({})
+    print(vendor_email)
     products={}
     products["brand_name"] = request.json["brand_name"]
     products["vendor_email"]= vendor_email
     products["model_name"] = request.json["model_name"]
-    # products["model_number"] = request.json["model_number"]
-    # products["color"] = request.json["color"]
-    # products["ram"] = request.json["ram"]
-    # products["internal_storage"] = request.json["internal_storage"]
-    # products["primary_camera"] = request.json["primary_camera"]
-    # products["secondary_camera"] = request.json["secondary_camera"]
-    # products["battery"] = request.json["battery"]
-    # products["processor"] = request.json["processor"]
-    # products["operating_system"] = request.json["operating_system"]
-    # products["warranty"] = request.json["warranty"]
-    # products["hybrid_sim_slot"] = request.json["hybrid_sim_slot"]
-    # products["bluetooth"] = request.json["bluetooth"]
-    # products["no_of_sec_camera"] = request.json["no_of_sec_camera"]
-    # products["no_of_primary_camera"] = request.json["no_of_primary_camera"]
-    # products["available_quantity"] = request.json["available_quantity"]
-    # products["price"] = request.json["price"]
-    # products["image2"] = request.json["image2"]
-    # #  offer price in percentage
-    # products["offer_price"] = request.json["offer_price"] 
-    # products["discounted_price"] = request.json["discounted_price"]
+    products["color"] = request.json["color"]
+    products["ram"] = request.json["ram"]
+    products["internal_storage"] = request.json["internal_storage"]
+    products["primary_camera"] = request.json["primary_camera"]
+    products["secondary_camera"] = request.json["secondary_camera"]
+    products["battery"] = request.json["battery"]
+    products["processor"] = request.json["processor"]
+    products["operating_system"] = request.json["operating_system"]
+    products["warranty"] = request.json["warranty"]
+    products["hybrid_sim_slot"] = request.json["hybrid_sim_slot"]
+    products["bluetooth"] = request.json["bluetooth"]
+    products["no_of_sec_camera"] = request.json["no_of_sec_camera"]
+    products["no_of_primary_camera"] = request.json["no_of_primary_camera"]
+    products["available_quantity"] = request.json["available_quantity"]
+    products["price"] = request.json["price"]
+    products["image2"] = request.json["image2"]
+    #  offer price in percentage
+    products["offer_price"] = request.json["offer_price"] 
+    products["discounted_price"] = request.json["discounted_price"]
     mongo.db.products.insert(products)
     count = mongo.db.products.find({"vendor_email":vendor_email}).count()
     print(count)
@@ -245,9 +245,11 @@ def vendor_past_orders(token):
 #     data = mongo.db.products.find({"brand_name":brand},{"location":location})
 #     return dumps(data)
 
-# @app.route("/decode_token",methods=["POST"])
-# def decode_token():
-#     token = request.json["token"]
-#     decode = decode_token(token)
-#     vendor_email = str(decode["identity"])
-#     return dumps(email)
+@app.route("/decode_token",methods=["POST"])
+def decode_tokens():
+    token = request.json["token"]
+    print(token)
+    decode = decode_token(request.json["token"])
+    print(decode)
+    vendor_email = str(decode["identity"])
+    return dumps(vendor_email)
