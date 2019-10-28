@@ -1,7 +1,7 @@
 import { createCookie, accessCookie, deleteCookie } from "./cookies";
 import axios from "axios";
-export function setUserTokenInCookie(userType, token) {
-	var isCookieCreated = createCookie(userType, token, 1);
+export function setUserTokenInCookie(tokenName, token) {
+	var isCookieCreated = createCookie(tokenName, token, 1);
 	if (isCookieCreated) {
 		return true;
 	} else {
@@ -9,8 +9,8 @@ export function setUserTokenInCookie(userType, token) {
 	}
 }
 
-export function clearUserToken(userType) {
-	var isCookieDeleted = deleteCookie(userType);
+export function clearUserToken(tokenName) {
+	var isCookieDeleted = deleteCookie(tokenName);
 	if (isCookieDeleted) {
 		return true;
 	} else {
@@ -18,28 +18,31 @@ export function clearUserToken(userType) {
 	}
 }
 
-export function checkIsTokenPresentInCookie(userType) {
-	var user = accessCookie(userType);
+export function checkIsTokenPresentInCookie(tokenName) {
+	var user = accessCookie(tokenName);
 	if (user != "") return true;
 	else {
 		return false;
 	}
 }
 
-export function getTokenFromCookie(userType) {
-	return accessCookie(userType);
+export function getTokenFromCookie(tokenName) {
+	return accessCookie(tokenName);
 }
 
 // return {isAuthenticated : bool, userType : string ('customer', 'vendor', 'admin')}
-export function checkIsAuthenticated(userType) {
+export function checkIsAuthenticated() {
 	try {
-		var isTokenPresent = checkIsTokenPresentInCookie(userType);
-		var userToken = getTokenFromCookie(userType);
-		console.log(userToken, isTokenPresent);
-		// var userType = decode_tokens()
+		var isTokenPresent = checkIsTokenPresentInCookie("userToken");
 		if (isTokenPresent === false) {
 			return { isAuthenticated: false, userType: null };
 		}
+		var userToken = getTokenFromCookie("userToken");
+		var isTypePresent = checkIsTokenPresentInCookie("userType");
+		if (isTypePresent === false) {
+			return { isAuthenticated: false, userType: null };
+		}
+		var userType= getTokenFromCookie("userType");
 		return { isAuthenticated: true, userType: userType, userToken: userToken };
 	} catch (error) {
 		console.error("Error in authenticating user....", error);

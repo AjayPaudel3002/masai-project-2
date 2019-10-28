@@ -31,7 +31,8 @@ export default class Login extends React.Component {
 			.then(response => {
 				console.log(response);
 				if (response.data.error == "false") {
-					setUserTokenInCookie(response.data.type, response.data.token);
+					setUserTokenInCookie("userToken", response.data.token);
+					setUserTokenInCookie("userType", response.data.type);
 				}
 			});
 	};
