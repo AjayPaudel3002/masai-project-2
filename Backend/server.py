@@ -253,3 +253,16 @@ def decode_tokens():
     print(decode)
     vendor_email = str(decode["identity"])
     return dumps(vendor_email)
+
+@app.route("/top_offers")
+def top_offers():
+    data=[]
+    data = mongo.db.products.find({}).sort("discounted_price",-1).limit(6)
+    # print(data)
+    # data1= mongo.db.products.aggregate([{"$sort":{"discounted_price":-1}}])
+    return dumps(data1)
+
+# @app.route("/best_sellers")
+# def best_sellers():
+#     data = mongo.db.products.find({}).sort("sold_count",-1).limit(6)
+#     return dumps(data)
